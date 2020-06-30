@@ -1,0 +1,123 @@
+alias selectorDial d0
+alias maxTempMem d1
+alias minTempMem d2
+alias maxPressureMem d3
+alias minPressureMem d4
+alias reagentsAmountMem d5
+
+alias selection r0
+alias maxTemp r1
+alias minTemp r2
+alias maxPressure r3
+alias minPressure r4
+alias expectedReagents r5
+alias prevSelection r6
+
+start:
+s maxPressureMem Setting 0
+s maxTempMem Setting 0
+s minPressureMem Setting 0
+s minTempMem Setting 0
+s reagentsAmountMem Setting 0
+waitSelection:
+yield
+l selection selectorDial Setting
+beq selection 0 waitSelection
+move expectedReagents 50
+beq selection 1 standard #steel, has same settings
+move expectedReagents 100
+beq selection 2 constantan
+beq selection 3 electrum
+beq selection 4 invar
+beq selection 5 solder
+move expectedReagents 200
+beq selection 7 astroloy # steel is 6
+beq selection 8 hastelloy
+beq selection 9 inconel
+beq selection 10 stellite
+beq selection 11 waspaloy
+
+standard:
+move maxPressure 10000
+move minPressure 100
+move maxTemp 90000
+move minTemp 600
+j waitActive
+
+constantan:
+move maxPressure 10000
+move minPressure 100
+move maxTemp 1500
+move minTemp 1000
+j waitActive
+
+electrum:
+move maxPressure 2400
+move minPressure 800
+move maxTemp 10000
+move minTemp 700
+j waitActive
+
+invar:
+move maxPressure 7000
+move minPressure 6000
+move maxTemp 2000
+move minTemp 1200
+j waitActive
+
+solder:
+move maxPressure 3500
+move minPressure 300
+move maxTemp 2000
+move minTemp 300
+j waitActive
+
+astroloy:
+move maxPressure 6000
+move minPressure 5000
+move maxTemp 1400
+move minTemp 1200
+j waitActive
+
+hastelloy:
+move maxPressure 3000
+move minPressure 2500
+move maxTemp 1000
+move minTemp 950
+j waitActive
+
+inconel:
+move maxPressure 4750
+move minPressure 4250
+move maxTemp 1250
+move minTemp 1150
+j waitActive
+
+stellite:
+move maxPressure 5000
+move minPressure 4000
+move maxTemp 1900
+move minTemp 1700
+j waitActive
+
+waspaloy:
+move maxPressure 2750
+move minPressure 1250
+move maxTemp 1000
+move minTemp 875
+j waitActive
+
+waitActive:
+yield
+s maxPressureMem Setting maxPressure
+s minPressureMem Setting minPressure
+s maxTempMem Setting maxTemp
+s minTempMem Setting minTemp
+s reagentsAmountMem Setting expectedReagents
+j waitChange
+
+waitChange:
+yield
+l prevSelection reagentsAmountMem Setting
+breq expectedReagents prevSelection waitSelection
+j waitChange
