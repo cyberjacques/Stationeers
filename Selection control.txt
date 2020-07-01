@@ -31,11 +31,13 @@ beq selection 3 electrum
 beq selection 4 invar
 beq selection 5 solder
 move expectedReagents 200
-beq selection 7 astroloy # steel is 6
+beq selection 6 standard # steel is 6
+beq selection 7 astroloy
 beq selection 8 hastelloy
 beq selection 9 inconel
 beq selection 10 stellite
 beq selection 11 waspaloy
+j waitActive
 
 standard:
 move maxPressure 10000
@@ -118,6 +120,6 @@ j waitChange
 
 waitChange:
 yield
-l prevSelection reagentsAmountMem Setting
-breq expectedReagents prevSelection waitSelection
-j waitChange
+l prevSelection selectorDial Setting
+beq selection prevSelection waitChange
+j start
